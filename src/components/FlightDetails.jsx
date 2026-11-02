@@ -1,16 +1,13 @@
-import { STATUS_LABELS, STATUS_CLASS } from '../constants/flights';
-
 export default function FlightDetails({ flight }) {
   return (
-    <dl className="details">
-      <dt>Номер рейса</dt>          <dd>{flight.flightNumber}</dd>
-      <dt>Маршрут</dt>              <dd>{flight.departureAirport} → {flight.arrivalAirport}</dd>
-      <dt>Плановое время вылета</dt><dd>{new Date(flight.scheduledDeparture).toLocaleString('ru-RU')}</dd>
-      <dt>Текущий статус</dt>       <dd>
-        <span className={`status ${STATUS_CLASS[flight.status]}`}>
-          {STATUS_LABELS[flight.status]}
-        </span>
-      </dd>
-    </dl>
+    <div className="details-box">
+      <h4>Детали рейса</h4>
+      <div className="details-grid">
+        <div><span className="label">Номер:</span> {flight.flightNumber}</div>
+        <div><span className="label">Маршрут:</span> {flight.departureAirport} → {flight.arrivalAirport}</div>
+        <div><span className="label">Плановый вылет:</span> {new Date(flight.scheduledDeparture).toLocaleString('ru-RU')}</div>
+        <div><span className="label">Код рейса:</span> {flight.id}</div>
+      </div>
+    </div>
   );
 }

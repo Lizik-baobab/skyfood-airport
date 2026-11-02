@@ -12,7 +12,7 @@ export default function App() {
     const res = await runCommand(id, commandKey);
     setToast(
       res.ok
-        ? { message: 'Команда выполнена', type: 'success' }
+        ? { message: 'Команда успешно выполнена', type: 'success' }
         : { message: res.message, type: 'error' }
     );
   };
@@ -20,28 +20,41 @@ export default function App() {
   const handleReset = async () => {
     await resetFlights();
     reload();
-    setToast({ message: 'Данные сброшены', type: 'success' });
+    setToast({ message: 'Данные сброшены к исходным', type: 'success' });
   };
 
   return (
-    <main className="app">
-      <header className="app__header">
-        <h1>SkyFood — эмулятор аэропортовой системы</h1>
-        <div className="app__actions">
-          <button onClick={reload} disabled={loading}>Обновить список</button>
-          <button className="btn--ghost" onClick={handleReset} disabled={loading}>
-            Сбросить данные
+    <div className="skyfood-admin">
+      <header className="admin-header">
+        <div className="admin-logo">
+          <span className="logo-icon">✈</span> SKYFOOD
+          <span className="logo-sub">Панель авиакомпании</span>
+        </div>
+        <div className="admin-actions">
+          <button className="btn-secondary" onClick={reload} disabled={loading}>
+            Обновить данные
+          </button>
+          <button className="btn-primary" onClick={handleReset} disabled={loading}>
+            Сбросить всё
           </button>
         </div>
       </header>
 
-      {loading && <p className="hint">Загрузка…</p>}
-      {error && !loading && <p className="error">{error}</p>}
-      {!loading && !error && (
-        <FlightTable flights={flights} pendingId={pendingId} onCommand={handleCommand} />
-      )}
+      <main className="admin-main">
+        {loading && <div className="loading-state">Загрузка рейсов...</div>}
+        {error && !loading && <div className="error-state">{error}</div>}
+        {!loading && !error && (
+          <FlightTable flights={flights} pendingId={pendingId} onCommand={handleCommand} />
+        )}
+      </main>
 
-      <Toast message={toast?.message} type={toast?.type} onClose={() => setToast(null)} />
-    </main>
+      {toast && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast(null)} 
+        />
+      )}
+    </div>
   );
 }

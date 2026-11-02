@@ -1,38 +1,51 @@
-import { STATUS_LABELS, STATUS_CLASS, COMMANDS } from '../constants/flights';
+import { STATUS_LABELS, COMMANDS } from '../constants/flights';
 import FlightDetails from './FlightDetails';
 
 export default function FlightRow({ flight, pending, expanded, onToggle, onCommand }) {
+  const isDelayed = flight.status === 'DELAYED';
+
   return (
     <>
-      <tr
-        className={`flight-row ${expanded ? 'flight-row--open' : ''}`}
+      <tr 
+        className={`flight-row ${expanded ? 'row-open' : ''}`} 
         onClick={onToggle}
       >
-        <td>{flight.id}</td>
-        <td>{flight.flightNumber}</td>
-        <td>{flight.departureAirport}</td>
-        <td>{flight.arrivalAirport}</td>
-        <td>{new Date(flight.scheduledDeparture).toLocaleString('ru-RU')}</td>
+        <td className="fw-bold">{flight.flightNumber}</td>
+        <td>{flight.airline || 'SkyFood Airways'}</td>
+        <td>{flight.departureAirport} → {flight.arrivalAirport}</td>
+        <td>{new Date(flight.scheduledDeparture).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
         <td>
-          <span className={`status ${STATUS_CLASS[flight.status]}`}>
+          <span className={`status-badge ${isDelayed ? 'warn' : 'ok'}`}>
             {STATUS_LABELS[flight.status]}
           </span>
         </td>
-        <td className="actions" onClick={(e) => e.stopPropagation()}>
-          <button disabled={pending} onClick={() => onCommand(flight.id, 'DELAY')}>
-            {COMMANDS.DELAY.label}
+        <td className="actions-cell" onClick={(e) => e.stopPropagation()}>
+          <button 
+            className="btn-action" 
+            disabled={pending} 
+            onClick={() => onCommand(flight.id, 'DELAY')}
+          >
+            Задержать
           </button>
-          <button disabled={pending} onClick={() => onCommand(flight.id, 'DELAY_FOUR_HOURS')}>
-            {COMMANDS.DELAY_FOUR_HOURS.label}
+          <button 
+            className="btn-action" 
+            disabled={pending} 
+            onClick={() => onCommand(flight.id, 'DELAY_FOUR_HOURS')}
+          >
+            +4 часа
           </button>
-          <button disabled={pending} onClick={() => onCommand(flight.id, 'CANCEL_DELAY')}>
-            {COMMANDS.CANCEL_DELAY.label}
+          <button 
+            className="btn-action btn-outline" 
+            disabled={pending} 
+            onClick={() => onCommand(flight.id, 'CANCEL_DELAY')}
+          >
+            Отменить
           </button>
         </td>
       </tr>
       {expanded && (
         <tr className="details-row">
-          <td colSpan={7}>
+          <td colSpan={6}>
             <FlightDetails flight={flight} />
           </td>
         </tr>

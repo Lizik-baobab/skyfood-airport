@@ -1,9 +1,9 @@
-export default function Toast({ message, type = 'info', onClose }) {
+export default function Toast({ message, type, onClose }) {
   if (!message) return null;
   return (
-    <div className={`toast toast--${type}`} role="status">
+    <div className={`toast toast-${type}`}>
       <span>{message}</span>
-      <button onClick={onClose} aria-label="Закрыть">×</button>
+      <button onClick={onClose}>×</button>
     </div>
   );
 }
