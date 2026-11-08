@@ -1,16 +1,26 @@
-# React + Vite
+# SkyFood Airport
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite frontend for the SkyFood Airport emulator.
 
-Currently, two official plugins are available:
+## Запуск локально
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+Для проверки production-сборки:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm run build
+npm run preview
+```
 
-## Expanding the ESLint configuration
+## Экраны
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Рейсы** — список рейсов, фильтры по номеру/ID/маршруту, аэропорту, авиакомпании и статусу; переход в карточку рейса.
+- **Отчёты** — общий список рейсов и поиск по номеру; открытие отчёта выбранного рейса.
+- **Карточка рейса** — увеличение задержки на 2/4/6/8 часов, начало посадки, отмена рейса и фиксация вылета.
+- **Отчёт по рейсу** — длительность задержки, пассажиры, плановое и оценочное время вылета, хронология и итоговая сводка.
+
+Состояние рейсов и внесённые изменения сохраняются в `localStorage` браузера. Данные включают 21 рейс из набора V7 (SVO, KZN, LED; Аэрофлот, S7 Airlines, Уральские авиалинии). Подключение к Java REST API выполняется отдельно после согласования его фактического контракта; в текущей версии запросы к backend не имитируются.
