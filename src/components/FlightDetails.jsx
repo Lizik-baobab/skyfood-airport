@@ -1,49 +1,22 @@
-import { STATUS_LABELS } from '../constants/flights';
+import { X, Plane, Clock3, Building2, MapPin } from 'lucide-react';
+import StatusPill from './StatusPill';
 
-function formatDate(value) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value || '—';
-  return new Intl.DateTimeFormat('ru-RU', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(date);
-}
-
-export default function FlightDetails({ flight }) {
-  return (
-    <div className="details-box">
-      <div className="details-heading">
-        <span className="details-plane" aria-hidden="true">✈</span>
-        <div>
-          <p className="eyebrow">FLIGHT INFORMATION</p>
-          <h3>Информация о рейсе {flight.flightNumber}</h3>
-        </div>
+export default function FlightDetails({ flight, onClose }) {
+  if (!flight) return null;
+  return <div className="modal-backdrop" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+    <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="flight-title">
+      <div className="modal-head"><div><div className="eyebrow">КАРТОЧКА РЕЙСА</div><h2 id="flight-title">{flight.flightNumber}</h2></div><button className="icon-button" onClick={onClose} aria-label="Закрыть"><X size={20}/></button></div>
+      <div className="detail-status"><StatusPill status={flight.status}/>{flight.delayMinutes > 0 && <span className="delay-value">{flight.delayMinutes} минут задержки</span>}</div>
+      <div className="detail-grid">
+        <div className="detail-item"><Building2/><span>Авиакомпания</span><b>{flight.airline}</b></div>
+        <div className="detail-item"><Clock3/><span>Дата</span><b>{flight.date || '—'}</b></div>
+        <div className="detail-item"><MapPin/><span>Пункт отправления</span><b>{flight.origin}</b></div>
+        <div className="detail-item"><MapPin/><span>Пункт назначения</span><b>{flight.destination}</b></div>
+        <div className="detail-item"><Plane/><span>Плановое время вылета</span><b>{flight.scheduledDeparture}</b></div>
+        <div className="detail-item"><Clock3/><span>Плановое время прибытия</span><b>{flight.scheduledArrival}</b></div>
       </div>
-      <div className="details-grid">
-        <div className="detail-item">
-          <span className="detail-label">Номер рейса</span>
-          <strong>{flight.flightNumber || '—'}</strong>
-        </div>
-        <div className="detail-item">
-          <span className="detail-label">Маршрут</span>
-          <strong>{flight.departureAirport || '—'} <span className="route-arrow">→</span> {flight.arrivalAirport || '—'}</strong>
-        </div>
-        <div className="detail-item">
-          <span className="detail-label">Плановое время вылета</span>
-          <strong>{formatDate(flight.scheduledDeparture)}</strong>
-        </div>
-        <div className="detail-item">
-          <span className="detail-label">Текущий статус</span>
-          <strong>{STATUS_LABELS[flight.status] || flight.status || '—'}</strong>
-        </div>
-        <div className="detail-item">
-          <span className="detail-label">ID рейса</span>
-          <strong>#{flight.id}</strong>
-        </div>
-      </div>
-    </div>
-  );
+      <div className="modal-note">Выдача ваучеров, определение права на компенсацию и расчёт задолженности выполняются backend. Карточка рейса не изменяет финансовые данные.</div>
+      <div className="modal-actions"><button className="button button-primary" onClick={onClose}>Готово</button></div>
+    </section>
+  </div>;
 }
